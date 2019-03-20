@@ -1,0 +1,42 @@
+{
+  "name": "react-ssr",
+  "version": "1.0.0",
+  "description": "react-ssr",
+  "scripts": {
+    "start": "webpack-dev-server --mode development --open",
+    "start:ssr": "npm run start -- --ssr",
+    "build": "webpack --mode production",
+    "build:ssr": "npm run build && npm run build -- --ssr",
+    "serve": "NODE_ENV=production node build/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:xyyjk/react-ssr.git"
+  },
+  "keywords": [
+    "react-ssr"
+  ],
+  "author": "xyyjk",
+  "license": "MIT",
+  "dependencies": {
+    "express": "~4.16.4",
+    "isomorphic-fetch": "~2.2.1",
+    "jsesc": "~2.5.2",
+    "react": "~16.8.4",
+    "react-dom": "~16.8.4",
+    "react-helmet": "~5.2.0",
+    "react-router-dom": "~5.0.0"
+  },
+  "devDependencies": {
+    "@babel/register": "~7.4.0",
+    "@neutrinojs/react": "~9.0.0-rc.0",
+    "decache": "~4.5.1",
+    "ignore-styles": "~5.0.1",
+    "neutrino": "~9.0.0-rc.0",
+    "react-hot-loader": "~4.8.0",
+    "webpack": "~4.29.6",
+    "webpack-cli": "~3.3.0",
+    "webpack-dev-server": "~3.2.1",
+    "webpack-node-externals": "~1.7.2"
+  }
+}
