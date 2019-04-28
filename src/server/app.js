@@ -12,6 +12,10 @@ app.get(routes, async (req, res) => {
   res.send(await render({ req, res }));
 });
 
+app.use((req, res, next) => {
+  res.sendStatus(404);
+});
+
 app.listen(port, (err) => {
   if (err) {
     console.error(err);

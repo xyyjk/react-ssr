@@ -4,7 +4,9 @@ import fetchData from '../utils/fetchData';
 
 function isCurUrl() {
   if (!window.__INITIAL_DATA__) { return false; }
-  return document.location.href === window.__INITIAL_DATA__.href;
+  const { pathname, search } = document.location;
+  const locUrl = `${pathname}${search}`;
+  return locUrl === window.__INITIAL_DATA__.url;
 }
 
 class Content extends React.Component {

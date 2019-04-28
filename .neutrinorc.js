@@ -1,9 +1,11 @@
+const react = require('@neutrinojs/react');
+
 const isDev = process.env.NODE_ENV !== 'production';
 const isSSR = process.argv.includes('--ssr');
 
 module.exports = {
   use: [
-    ['@neutrinojs/react', {
+    react({
       devServer: {
         port: isSSR ? 3000 : 5000,
         host: '0.0.0.0',
@@ -11,10 +13,9 @@ module.exports = {
         contentBase: `${__dirname}/src`,
         before(app) { if(isSSR) { require('./src/server')(app); } },
       },
-      manifest: true,
       html: isSSR ? false: {},
       clean: { paths: ['./node_modules/.cache']},
-    }],
+    }),
 
     ({ config }) => {
       if (isDev) { return; }
