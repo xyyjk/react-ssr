@@ -1,6 +1,5 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import fetchData from '../utils/fetchData';
 
 function isCurUrl() {
   if (!window.__INITIAL_DATA__) { return false; }
@@ -25,9 +24,9 @@ class Content extends React.Component {
 
   async componentDidMount() {
     if (isCurUrl()) { return; }
-    
-    const { match } = this.props;
-    const data = await fetchData({ match });
+
+    const { fetchData, match } = this.props;
+    const data = await fetchData({ req: {}, match });
 
     this.setState({ data });
   }

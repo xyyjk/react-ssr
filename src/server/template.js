@@ -2,7 +2,7 @@ const fs = require('fs');
 const jsesc = require('jsesc');
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports = ({ markup, helmet, locals }) => (
+  module.exports = ({ markup, helmet, context }) => (
     fs.readFileSync('build/index.html', 'utf8')
       .replace(
         '<html>',
@@ -22,11 +22,11 @@ if (process.env.NODE_ENV === 'production') {
       )
       .replace(
         '<div id="root"></div>',
-        `<div id="root">${markup}</div><script>window.__INITIAL_DATA__ = ${jsesc(locals)}</script>`,
+        `<div id="root">${markup}</div><script>window.__INITIAL_DATA__ = ${jsesc(context)}</script>`,
       )
   );
 } else {
-  module.exports = ({ helmet, markup, locals }) => `
+  module.exports = ({ helmet, markup, context }) => `
     <!DOCTYPE html>
     <html ${helmet.htmlAttributes.toString()}>
       <head>
@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === 'production') {
       </head>
       <body ${helmet.bodyAttributes.toString()}>
         <div id="root">${markup}</div>
-        <script>window.__INITIAL_DATA__ = ${jsesc(locals)}</script>
+        <script>window.__INITIAL_DATA__ = ${jsesc(context)}</script>
         <script src="/assets/runtime.js"></script>
         <script src="/assets/vendors~index.js"></script>
         <script src="/assets/index.js"></script>

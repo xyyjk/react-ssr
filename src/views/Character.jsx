@@ -1,18 +1,18 @@
 import React from 'react';
-import Content from '../comps/Content';
+import useFetch from '../hooks/useFetch';
 
-const Character = () => (
-  <Content render={({ data }) => {
-    const { animeography = [] } = data;
+export default function Character(props) {
+  const data = useFetch(props, Character);
 
-    return (
-      <>
-        <h2>{data.name}</h2>
-        <p>{data.about}</p>
-        <img src={data.image_url} width="225" />
-      </>
-    );
-  }} />
-);
+  return (
+    <>
+      <h2>{data.name}</h2>
+      <p>{data.about}</p>
+      <img src={data.image_url} width="225" />
+    </>
+  );
+}
 
-export default Character;
+Character.option = ({ req }) => ({
+  url: `https://api.jikan.moe/v3/character/${req.params.key}`,
+});
