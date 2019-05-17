@@ -6,6 +6,7 @@ const { CancelToken } = axios;
 const source = CancelToken.source();
 
 function hasCacheData() {
+  if (!window.__INITIAL_DATA__) { return false; }
   const { pathname, search } = document.location;
   const url = `${pathname}${search}`;
   const uuid = uuidv5(url, uuidv5.URL);
