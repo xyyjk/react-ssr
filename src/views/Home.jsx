@@ -25,12 +25,8 @@ export default function Home(props) {
   );
 }
 
-
 Home.option = ctx => ({
   url: 'https://api.jikan.moe/v3/manga/1/characters',
   params: { a: 1, b: 2 },
-  cache(data) {
-    console.log(ctx.req.url, typeof data);
-    return true;
-  },
+  cache: ({ characters = [] }) => characters.length,
 });

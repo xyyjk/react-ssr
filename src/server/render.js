@@ -1,26 +1,19 @@
-require('isomorphic-fetch');
-
 const React = require('react');
 const { renderToString } = require('react-dom/server');
 const { matchPath } = require('react-router-dom');
 const { Helmet } = require('react-helmet');
-const template = require('./template');
+const axios = require('axios');
+const uuidv5 = require('uuid/v5');
 
+const template = require('./template');
 const { default: routes } = require('../routes');
 
-function param(obj = {}) {
-  const arr = Object.keys(obj);
-  if (!arr.length) { return ''; }
-
-  return `?${arr.map(key => `${key}=${encodeURIComponent(obj[key])}`).join('&')}`;
-}
-
-async function fetchData({ req, res }) {
-  const { component } = routes.find(
+function getOption({ req, res }) {
+  const {
+    component: { option = () => ({}) },
+  } = routes.find(
     route => matchPath(req.url, route),
   );
-
-  if (!component.option) { return {}; }
 
   const context = {
     req, res, err: null,
@@ -31,12 +24,25 @@ async function fetchData({ req, res }) {
   const {
     url = '', params = {},
     cache = () => false,
-  } = component.option(context);
+  } = option(context);
 
-  const results = await fetch(`${url}${param(params)}`);
-  const data = results.status === 200 ? await results.json() : {};
+  return { url, params, cache };
+}
+
+async function fetchData({ req, res }) {
+  const { url, params, cache } = getOption({ req, res });
+
+  if (!url) { return {}; }
+
+  const data = await axios(url, { params })
+    .then((res) => res.data)
+    .catch((err) => {
+      console.log(err);
+      return {};
+    });
 
   if (cache(data)) {
+    // lru-cache
     console.log('Set Cache !');
   }
 
@@ -46,6 +52,7 @@ async function fetchData({ req, res }) {
 module.exports = async ({ req, res }) => {
   const context = {
     data: await fetchData({ req, res }),
+    uuid: uuidv5(req.url, uuidv5.URL),
     url: req.url,
   };
 
